@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facial Expression Classifier</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+
+        .box{
+            margin: 0.5rem;
+            border: 0.5rem solid black;
+            border-radius: 5px;
+        }
+        .container{
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <video id="webcam" class="box" width="640" height="480" autoplay></video>
+        <img id="resultImage" class="box" width="640" height="480">        
+    </div>
+
+    <script>
+        // create socket object
+        const socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        socket.on('connect', () => {
+            console.log('WebSocket connected');
+        });
+        
+        // update resultImage with processed image from backend
+        socket.on('result_image', (data) => {
+            console.log('Received result image data:', data);
+            const resultImage = document.getElementById('resultImage');
+            resultImage.src = 'data:image/jpeg;base64,' + data.result_image_data;
+        });
+
+        async function setupWebcam() {
+            const video = document.getElementById('webcam');
+            const stream = await navigator.mediaDevices.getUserMedia({ 'video': true });
+            video.srcObject = stream;
+
+            // Capture and send webcam frames to the server
+            const captureAndSend = async () => {
+                const imageCapture = new ImageCapture(stream.getVideoTracks()[0]);
+                const blob = await imageCapture.takePhoto();
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    const imageData = reader.result.split(',')[1];
+                    socket.emit('image', { 'image_data': imageData });
+                };
+                reader.readAsDataURL(blob);
+
+                // repeat the captureAndSend function
+                setTimeout(captureAndSend, 50);  // adjust the interval as needed
+            };
+
+            // atart capturing and sending webcam frames
+            captureAndSend();
+        }
+
+        // call setupWebcam() when the WebSocket connection is established
+        socket.on('connect', () => {
+            console.log('WebSocket connected');
+            setupWebcam();
+        });
+    </script>
+
+</body>
+</html>
