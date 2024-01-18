@@ -21,7 +21,7 @@ def predict_and_overlay(frame):
     
     # drawing lines on detected faces
     for idx, (x, y, width, height) in enumerate(faces, 1):
-        cv2.rectangle(frame, (x, y), (x + width, y + height), (0, 255, 0))
+        cv2.rectangle(frame, (x, y), (x + width, y + height), (0, 255, 0), thickness=1)
         result_dict = clf.predict(frame[x:x+width, y:y+height])
         # show 2 highest probability classes
         emotions = ", ".join(list(result_dict.keys())[:2])

@@ -67,7 +67,7 @@ class FECApp(tk.Tk):
 
             # drawing lines on detected box
             for idx, (x, y, width, height) in enumerate(faces, 1):
-                cv2.rectangle(frame, (x, y), (x + width, y + height), (0, 255, 0))
+                cv2.rectangle(frame, (x, y), (x + width, y + height), (0, 255, 0), thickness=1)
                 
                 result_dict = self.clf.predict(frame[x:x+width, y:y+height])
                 # show 2 highest probability classes

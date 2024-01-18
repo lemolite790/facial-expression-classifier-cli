@@ -5,9 +5,9 @@ from web.app import start_web_app
 from image.image import predict_facial_expression
 
 from classifiers import FacialExpressionClassifier
-from face_detectors import HaarCascadeFaceDetector
+from face_detectors import HaarCascadeFaceDetector, MediaPipeFaceDetector
 
-face_detector = HaarCascadeFaceDetector()
+face_detector = MediaPipeFaceDetector()
 clf = FacialExpressionClassifier.from_json("model.json", "model_with_ferplus")
 
 args = get_options()
