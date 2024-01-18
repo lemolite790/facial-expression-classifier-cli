@@ -20,8 +20,8 @@ def predict_facial_expression(source_image:np.ndarray, clf:IModel, face_detector
         print(f"face-{idx} : {emotions}")
 
 if __name__ == '__main__':
+    from classifiers import FacialExpressionClassifier
     from face_detectors import HaarCascadeFaceDetector
-    from facial_expression_classifier import FacialExpressionClassifier
     detector = HaarCascadeFaceDetector()
     clf = FacialExpressionClassifier.from_json("model.json", "model_with_ferplus")
     predict_facial_expression(".tmp//smile.jpg", clf, detector)

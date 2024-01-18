@@ -1,11 +1,11 @@
 from options import get_options
 
-from gui import FECApp 
+from gui.app import FECApp
 from web.app import start_web_app
-from image import predict_facial_expression
+from image.image import predict_facial_expression
 
+from classifiers import FacialExpressionClassifier
 from face_detectors import HaarCascadeFaceDetector
-from facial_expression_classifier import FacialExpressionClassifier
 
 face_detector = HaarCascadeFaceDetector()
 clf = FacialExpressionClassifier.from_json("model.json", "model_with_ferplus")

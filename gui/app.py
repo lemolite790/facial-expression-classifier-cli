@@ -1,11 +1,8 @@
-import os
 import cv2
 import tkinter as tk
 from tkinter.filedialog import askopenfile
 from PIL import Image, ImageTk
-import numpy as np
 from interfaces import IModel, IFaceDetector
-
 
 class VideoDevice: 
     VIDEO_SOURCE = 0
@@ -84,8 +81,8 @@ class FECApp(tk.Tk):
         
 
 if __name__ == '__main__':
+    from classifiers import FacialExpressionClassifier
     from face_detectors import HaarCascadeFaceDetector
-    from facial_expression_classifier import FacialExpressionClassifier
     clf = FacialExpressionClassifier.from_json("model.json", "model_with_ferplus")
     detecotr = HaarCascadeFaceDetector()
     app = FECApp(clf, detecotr)
