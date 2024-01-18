@@ -1,15 +1,22 @@
 from options import get_options
+
+from gui import FECApp 
 from web.app import start_web_app
-from gui import EmotionClassifier as GUI
 from image import predict_facial_expression
+
+from face_detectors import HaarCascadeFaceDetector
+from facial_expression_classifier import FacialExpressionClassifier
+
+face_detector = HaarCascadeFaceDetector()
+clf = FacialExpressionClassifier.from_json("model.json", "model_with_ferplus")
 
 args = get_options()
 
 if args.mode == 'web':
-    start_web_app(args.port)
+    start_web_app(args.port, clf, face_detector)
 
 elif args.mode == 'gui':
-    GUI().mainloop()
+    FECApp(clf, face_detector).mainloop()
 
 elif args.mode == 'image':
-    predict_facial_expression(args.image_file)
+    predict_facial_expression(args.image_file, clf, face_detector)
