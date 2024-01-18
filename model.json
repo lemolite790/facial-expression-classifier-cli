@@ -1,0 +1,8 @@
+{
+    "model_with_ferplus" : 
+        {
+        "modelPath" : "trained_models/model_with_ferplus.h5",
+        "inputSize" : [48, 48, 1],
+        "labels" : ["neutral", "happiness", "surprise", "sadness", "anger", "disgust", "fear", "contempt", "unknown", "NF"]
+        }
+}
