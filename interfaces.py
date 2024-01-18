@@ -1,10 +1,10 @@
 import numpy as np
 from typing import List, Tuple
-from abc import ABC, abstractclassmethod
+from abc import ABC, abstractmethod
 
 class IModel(ABC):
 
-    @abstractclassmethod
+    @abstractmethod
     def predict(self, image:np.ndarray) -> np.ndarray:
         """
         predict : predicts the label for multilabelclassification problem
@@ -16,7 +16,7 @@ class IModel(ABC):
 
 class IFaceDetector(ABC):
 
-    @abstractclassmethod
+    @abstractmethod
     def detect_faces(self, image:np.ndarray) -> List[Tuple[int, int, int, int]]:
         """
         detect_faces : find faces from input images
