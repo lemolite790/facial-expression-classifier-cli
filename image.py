@@ -1,34 +1,27 @@
 # Imports
-import cv2
-import keras
 import numpy as np
-import tensorflow as tf
 from PIL import Image
-import matplotlib.pyplot as plt
+from interfaces import IModel, IFaceDetector
 
-def predict_facial_expression(img):
+def predict_facial_expression(source_image:np.ndarray, clf:IModel, face_detector:IFaceDetector):
 
-    # face detector
-    model = keras.models.load_model('clfs//model_with_ferplus.h5')
-    # LABLES = ['Happy', 'Sad']
-    LABLES = ['Angry', 'Disgust', 'Fear', 'Happy', 'Neutral', 'Sad', 'Surprise']
-    LABLES = ['Angry', 'Disgust', 'Fear', 'Happy', 'Neutral', 'Sad', 'Surprise']
-    LABLES = ['neutral', 'happiness', 'surprise', 'sadness', 'anger', 'disgust', 'fear', 'contempt', 'unknown', 'NF']
+    # open image
+    image = Image.open(source_image)
+    image = np.asarray(image).copy()
 
-    # open method used to open different extension image file 
-    img = Image.open(img)  
-    img = np.array(img)[:, :, 1]
+    # detect faces
+    faces = face_detector.detect_faces(image)
 
-    img = cv2.resize(img, (48, 48))
-    img = img.flatten()
-    img = img.reshape(-1,48,48,1)
-    img = (img-127.5)/127.5
-    y_pred = model.predict(img, verbose=False)
-    y_label = np.argmax(y_pred[0])
+    # drawing lines on detected box
+    for idx, (x, y, width, height) in enumerate(faces, 1):
+        result_dict = clf.predict(image[x:x+width, y:y+height])
+        # show 2 highest probability classes
+        emotions = ", ".join(list(result_dict.keys())[:2])
+        print(f"face-{idx} : {emotions}")
 
-    print("Predicted Label :", LABLES[y_label])
-    # detailed 
-    print()
-    for idx in np.flip(np.argsort(y_pred[0])):
-        print(f"{LABLES[idx]:<10s} : {y_pred[0][idx] * 100:.2f}%")
-    
+if __name__ == '__main__':
+    from face_detectors import HaarCascadeFaceDetector
+    from facial_expression_classifier import FacialExpressionClassifier
+    detector = HaarCascadeFaceDetector()
+    clf = FacialExpressionClassifier.from_json("model.json", "model_with_ferplus")
+    predict_facial_expression(".tmp//smile.jpg", clf, detector)
