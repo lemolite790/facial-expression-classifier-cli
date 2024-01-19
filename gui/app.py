@@ -73,6 +73,8 @@ class FECApp(tk.Tk):
             for idx, (x, y, width, height) in enumerate(faces, 1):
                 cv2.rectangle(frame, (x, y), (x + width, y + height), LINE_COLOR, thickness=LINE_THICKNESS)
                 
+                if not(0 <= x < frame.shape[0]) or not(0 <= y < frame.shape[1]): continue
+                
                 result_dict = self.clf.predict(frame[x:x+width, y:y+height])
                 # show 2 highest probability classes
                 emotions = ", ".join(list(result_dict.keys())[:2])
