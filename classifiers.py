@@ -5,8 +5,7 @@ import json
 import numpy as np
 from PIL import Image
 from typing import List
-import tensorflow as tf
-import keras
+from tensorflow import keras
 from interfaces import IModel
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 

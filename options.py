@@ -10,8 +10,8 @@ def get_options():
     
     group = parser.add_mutually_exclusive_group()
     group.add_argument("-f", "--image-file", help="select image file (for mode = 'image')", type=str, required=False)
-    group.add_argument("-p", "--port", help="select port to host the web (for mode = 'web')", type=int, required=False, default=3108)
-    group.add_argument("-s", "--window-size", help="select window size (width) (for mode = 'gui')", type=int, required=False, default=600)
+    group.add_argument("-p", "--port", help="select port to host the web (for mode = 'web')", type=int, required=False, default=8080)
+    group.add_argument("-s", "--window-size", help="select window size (width) (for mode = 'gui')", type=int, required=False, default=640)
     
     args = parser.parse_args()
 
