@@ -16,7 +16,7 @@ if args.mode == 'web':
     start_web_app(args.port, clf, face_detector)
 
 elif args.mode == 'gui':
-    FECApp(clf, face_detector).mainloop()
+    FECApp(clf, face_detector, args.window_size).mainloop()
 
 elif args.mode == 'image':
     predict_facial_expression(args.image_file, clf, face_detector)
