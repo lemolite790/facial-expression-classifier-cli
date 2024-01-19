@@ -39,10 +39,10 @@ class VideoDevice:
 
 class FECApp(tk.Tk):
     
-    def __init__(self, clf : IModel, face_detector : IFaceDetector, *args, **kwargs):
+    def __init__(self, clf : IModel, face_detector : IFaceDetector, window_size = 640, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.title("Facial Expression Classifier")
-        self.geometry("600x600")
+        # self.geometry("600x600")
         self.clf = clf
         self.face_detector = face_detector
 
@@ -50,11 +50,13 @@ class FECApp(tk.Tk):
         self.emotion = None
         self.img_shape = None
         self.vid = VideoDevice()
-        self.main_pannel = tk.PanedWindow(self, orient=tk.HORIZONTAL)
-        self.main_pannel.pack()
         
-        self.canvas = tk.Canvas(self, width=self.vid.width, height=self.vid.height, border=3)
-        self.canvas.pack()
+        self.width = window_size
+        self.height = int((self.width / self.vid.width) * self.vid.height)
+        self.font_scale = 0.7 * (self.width / self.vid.width)
+
+        self.canvas = tk.Canvas(self, width=self.width, height=self.height)
+        self.canvas.pack(anchor=tk.CENTER)
 
         self.delay = 15
         self.update()
@@ -62,6 +64,7 @@ class FECApp(tk.Tk):
         
     def update(self):
         ret, frame = self.vid.get_frame()
+        frame = cv2.resize(frame, (self.width, self.height))
         if ret:
             
             faces = self.face_detector.detect_faces(frame)
@@ -73,7 +76,7 @@ class FECApp(tk.Tk):
                 result_dict = self.clf.predict(frame[x:x+width, y:y+height])
                 # show 2 highest probability classes
                 emotions = ", ".join(list(result_dict.keys())[:2])
-                cv2.putText(frame, f"face-{idx} : {emotions}", (x, y-10), FONT, 0.7, FONT_COLOR, FONT_THICKNESS, cv2.LINE_AA)
+                cv2.putText(frame, f"face-{idx} : {emotions}", (x, y-10), FONT, self.font_scale, FONT_COLOR, FONT_THICKNESS, cv2.LINE_AA)
                 
             self.photo = ImageTk.PhotoImage(image=Image.fromarray(frame))
             self.canvas.create_image(0, 0, image=self.photo, anchor=tk.NW)
