@@ -13,6 +13,7 @@ A command line API to use facial expression classifier with different input mode
 ```bash
 facial_expression_classifier [-h] [-m {web,gui,image}] [-f IMAGE_FILE | -p PORT | -s WINDOW_SIZE]
 ```
+
 ## Options
 
 - `-h, --help`: Show help message and exit.
@@ -28,16 +29,16 @@ facial_expression_classifier [-h] [-m {web,gui,image}] [-f IMAGE_FILE | -p PORT 
 ## Example Usages
 
 1. To use the facial expression classifier in web mode on port 5000: 
-    
+```bash    
     python main.py -m web -p 5000
-
+```
 
 2. To use the facial expression classifier in GUI mode with a specific window size: 
-    
+```bash    
     python main.py -m gui -s 800
-
+```
 
 3. To use the facial expression classifier on a specific image file: 
-    
+```bash    
     python main.py -m image -f path/to/image.jpg
-
+```
