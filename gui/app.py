@@ -2,6 +2,7 @@ import cv2
 import tkinter as tk
 from tkinter.filedialog import askopenfile
 from PIL import Image, ImageTk
+from config import FONT, FONT_COLOR, FONT_THICKNESS, LINE_COLOR, LINE_THICKNESS
 from interfaces import IModel, IFaceDetector
 
 class VideoDevice: 
@@ -67,12 +68,12 @@ class FECApp(tk.Tk):
 
             # drawing lines on detected box
             for idx, (x, y, width, height) in enumerate(faces, 1):
-                cv2.rectangle(frame, (x, y), (x + width, y + height), (0, 255, 0), thickness=1)
+                cv2.rectangle(frame, (x, y), (x + width, y + height), LINE_COLOR, thickness=LINE_THICKNESS)
                 
                 result_dict = self.clf.predict(frame[x:x+width, y:y+height])
                 # show 2 highest probability classes
                 emotions = ", ".join(list(result_dict.keys())[:2])
-                cv2.putText(frame, f"face-{idx} : {emotions}", (x, y-10), cv2.FONT_HERSHEY_DUPLEX, 0.7, (0, 255, 0), 1, cv2.LINE_AA)
+                cv2.putText(frame, f"face-{idx} : {emotions}", (x, y-10), FONT, 0.7, FONT_COLOR, FONT_THICKNESS, cv2.LINE_AA)
                 
             self.photo = ImageTk.PhotoImage(image=Image.fromarray(frame))
             self.canvas.create_image(0, 0, image=self.photo, anchor=tk.NW)

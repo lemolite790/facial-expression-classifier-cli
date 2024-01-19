@@ -3,6 +3,7 @@ import base64
 import numpy as np
 from PIL import Image
 from io import BytesIO
+from config import FONT, FONT_COLOR, FONT_THICKNESS, LINE_COLOR, LINE_THICKNESS
 from interfaces import IModel, IFaceDetector
 
 from flask_socketio import SocketIO
@@ -21,11 +22,11 @@ def predict_and_overlay(frame):
     
     # drawing lines on detected faces
     for idx, (x, y, width, height) in enumerate(faces, 1):
-        cv2.rectangle(frame, (x, y), (x + width, y + height), (0, 255, 0), thickness=1)
+        cv2.rectangle(frame, (x, y), (x + width, y + height), LINE_COLOR, thickness=LINE_THICKNESS)
         result_dict = clf.predict(frame[x:x+width, y:y+height])
         # show 2 highest probability classes
         emotions = ", ".join(list(result_dict.keys())[:2])
-        cv2.putText(frame, f"face-{idx} : {emotions}", (x, y-10), cv2.FONT_HERSHEY_DUPLEX, 0.7, (0, 255, 0), 1, cv2.LINE_AA)
+        cv2.putText(frame, f"face-{idx} : {emotions}", (x, y-10), FONT, 0.7, FONT_COLOR, FONT_THICKNESS, cv2.LINE_AA)
     
     return frame
 
